@@ -1,14 +1,17 @@
-from flask import Flask
+from flask import Flask, request
 import sqlalchemy
 import sqlite3
 
 import view
 
 app = Flask(__name__)
+#naive realisation handlers of pages
 
 @app.route("/")
 def index():
-    return "<h1>Hello</h1>"
+    user_agent = request.headers.get("User-Agent")
+    print(app.url_map)
+    return f"<h1>Hello {user_agent}</h1>"
 
 
 @app.route("/user/<name>")
