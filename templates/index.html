@@ -4,3 +4,8 @@
  <link rel="shortcut icon" href="{{url_for('static', filename = 'sync.ico')}}" type="image/x-icon">
  <link rel="icon" href="{{url_for('static', filename = 'sync.ico')}}" type="image/x-icon">
  {% endblock %}
+
+  {% block page_content%}
+<p> Local time: {{moment(current_time).format('LLL')}}</p>
+<p> it was: {{moment(current_time).fromNow(refresh=True)}}</p>
+   {% endblock %}

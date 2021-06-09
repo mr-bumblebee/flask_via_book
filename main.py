@@ -1,6 +1,8 @@
 from flask import Flask, request, make_response, redirect, abort, render_template
 # from flask_script import Manager
 from flask_bootstrap import Bootstrap
+from flask_moment import Moment
+from datetime import datetime
 import sqlalchemy
 import sqlite3
 
@@ -11,12 +13,13 @@ import view
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
+moment = Moment(app)
 
 # manager = Manager(app)
 
-@app.route("/<name>")
-def index(name):
-    return render_template("index.html", name=name)
+@app.route("/")
+def index():
+    return render_template("index.html", current_time=datetime.utcnow())
 
 
 @app.route("/user/<name>")
