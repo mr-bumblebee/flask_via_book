@@ -1,9 +1,16 @@
 from flask import Flask, request, make_response, redirect, abort, render_template
 # from flask_script import Manager
 from flask_bootstrap import Bootstrap
+#library for work with local date/time
 from flask_moment import Moment
+#library for work with web form
+
+
 from datetime import datetime
-import sqlalchemy
+#config file
+from config import Configuration
+from Forms import NameForm
+
 import sqlite3
 
 # секция комментариев
@@ -12,14 +19,20 @@ import sqlite3
 import view
 
 app = Flask(__name__)
+app.config.from_object(Configuration)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 
 # manager = Manager(app)
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
-    return render_template("index.html", current_time=datetime.utcnow())
+    name = None
+    form = NameForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        form.name.data = ""
+    return render_template("index.html", current_time=datetime.utcnow(), form=form, name=name)
 
 
 @app.route("/user/<name>")
@@ -29,6 +42,10 @@ def user(name):
     else:
         return render_template("user.html", name=name)
 
+
+@app.route("/webform")
+def webform():
+    return render_template("webform.html", form=NameForm())
 
 @app.route("/bad/")
 def bad():
