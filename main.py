@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response, redirect, abort, render_template
+from flask import Flask, request, make_response, redirect, abort, render_template, session, url_for
 # from flask_script import Manager
 from flask_bootstrap import Bootstrap
 #library for work with local date/time
@@ -30,9 +30,12 @@ def index():
     name = None
     form = NameForm()
     if form.validate_on_submit():
-        name = form.name.data
-        form.name.data = ""
-    return render_template("index.html", current_time=datetime.utcnow(), form=form, name=name)
+        session["name"] = form.name.data
+        return redirect(url_for("index"))
+    return render_template("index.html",
+                           current_time=datetime.utcnow(),
+                           form=form,
+                           name=session["name"]) # add redirecting with saveing  entering name
 
 
 @app.route("/user/<name>")
